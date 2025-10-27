@@ -6,6 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { decode, encode } from "./encoding";
 import { EmojiSelector } from "@/components/emoji-selector";
 import {
@@ -23,6 +25,7 @@ export function VariationVaultContent() {
   const mode = searchParams.get("mode") || "encode";
   const [inputText, setInputText] = useState("");
   const [selectedEmoji, setSelectedEmoji] = useState("😀");
+  const [customInput, setCustomInput] = useState("");
   const [outputText, setOutputText] = useState("");
   const [errorText, setErrorText] = useState("");
 
@@ -37,8 +40,9 @@ export function VariationVaultContent() {
   useEffect(() => {
     try {
       const isEncoding = mode === "encode";
+      const carrierChar = customInput || selectedEmoji;
       const output = isEncoding
-        ? encode(selectedEmoji, inputText)
+        ? encode(carrierChar, inputText)
         : decode(inputText);
       setOutputText(output);
       setErrorText("");
@@ -48,7 +52,7 @@ export function VariationVaultContent() {
         `Error ${mode === "encode" ? "encoding" : "decoding"}: Invalid input`
       );
     }
-  }, [mode, selectedEmoji, inputText]);
+  }, [mode, selectedEmoji, customInput, inputText]);
 
   const handleModeToggle = (checked: boolean) => {
     updateMode(checked ? "encode" : "decode");
@@ -107,37 +111,98 @@ export function VariationVaultContent() {
 
       {isEncoding && (
         <div className="space-y-4">
-          <EmojiSelector
-            onEmojiSelect={setSelectedEmoji}
-            selectedEmoji={selectedEmoji}
-            emojiList={EMOJI_LIST}
-            disabled={!isEncoding}
-            title="Pick an emoji"
-          />
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold">
+              Use your own emoji, word, or character
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="Type or paste anything (e.g., 🎨, word, symbol)..."
+                value={customInput}
+                onChange={(e) => {
+                  setCustomInput(e.target.value);
+                  if (e.target.value) {
+                    setSelectedEmoji("");
+                  }
+                }}
+                className="flex-1"
+              />
+              {customInput && (
+                <Button
+                  variant="outline"
+                  onClick={() => setCustomInput("")}
+                  className="px-3"
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
+            {customInput && (
+              <div className="text-xs text-muted-foreground bg-muted/30 p-2 rounded border">
+                Using custom:{" "}
+                <span className="font-mono font-semibold">{customInput}</span>
+              </div>
+            )}
+          </div>
 
-          <EmojiSelector
-            onEmojiSelect={setSelectedEmoji}
-            selectedEmoji={selectedEmoji}
-            emojiList={ALPHABET_LIST}
-            disabled={!isEncoding}
-            title="Or pick a letter"
-          />
+          {!customInput && (
+            <>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or choose from presets
+                  </span>
+                </div>
+              </div>
 
-          <EmojiSelector
-            onEmojiSelect={setSelectedEmoji}
-            selectedEmoji={selectedEmoji}
-            emojiList={NUMBER_LIST}
-            disabled={!isEncoding}
-            title="Or pick a number"
-          />
+              <EmojiSelector
+                onEmojiSelect={(emoji) => {
+                  setSelectedEmoji(emoji);
+                  setCustomInput("");
+                }}
+                selectedEmoji={selectedEmoji}
+                emojiList={EMOJI_LIST}
+                disabled={!isEncoding}
+                title="Pick an emoji"
+              />
 
-          <EmojiSelector
-            onEmojiSelect={setSelectedEmoji}
-            selectedEmoji={selectedEmoji}
-            emojiList={SPECIAL_CHAR_LIST}
-            disabled={!isEncoding}
-            title="Or pick a special character"
-          />
+              <EmojiSelector
+                onEmojiSelect={(emoji) => {
+                  setSelectedEmoji(emoji);
+                  setCustomInput("");
+                }}
+                selectedEmoji={selectedEmoji}
+                emojiList={ALPHABET_LIST}
+                disabled={!isEncoding}
+                title="Or pick a letter"
+              />
+
+              <EmojiSelector
+                onEmojiSelect={(emoji) => {
+                  setSelectedEmoji(emoji);
+                  setCustomInput("");
+                }}
+                selectedEmoji={selectedEmoji}
+                emojiList={NUMBER_LIST}
+                disabled={!isEncoding}
+                title="Or pick a number"
+              />
+
+              <EmojiSelector
+                onEmojiSelect={(emoji) => {
+                  setSelectedEmoji(emoji);
+                  setCustomInput("");
+                }}
+                selectedEmoji={selectedEmoji}
+                emojiList={SPECIAL_CHAR_LIST}
+                disabled={!isEncoding}
+                title="Or pick a special character"
+              />
+            </>
+          )}
         </div>
       )}
 
