@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Copy, Check } from "lucide-react";
 import { decode, encode } from "./encoding";
 import { EmojiSelector } from "@/components/emoji-selector";
 import {
@@ -28,6 +29,7 @@ export function VariationVaultContent() {
   const [customInput, setCustomInput] = useState("");
   const [outputText, setOutputText] = useState("");
   const [errorText, setErrorText] = useState("");
+  const [copied, setCopied] = useState(false);
 
   // Update URL when mode changes
   const updateMode = (newMode: string) => {
@@ -67,6 +69,18 @@ export function VariationVaultContent() {
   }, [searchParams, updateMode]);
 
   const isEncoding = mode === "encode";
+
+  const handleCopy = async () => {
+    if (!outputText) return;
+
+    try {
+      await navigator.clipboard.writeText(outputText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
 
   return (
     <CardContent className="space-y-5 pb-6">
@@ -207,9 +221,30 @@ export function VariationVaultContent() {
       )}
 
       <div className="space-y-2">
-        <Label className="text-sm font-semibold">
-          {isEncoding ? "Encoded output" : "Decoded message"}
-        </Label>
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-semibold">
+            {isEncoding ? "Encoded output" : "Decoded message"}
+          </Label>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleCopy}
+            disabled={!outputText}
+            className="h-8 gap-2"
+          >
+            {copied ? (
+              <>
+                <Check className="h-4 w-4" />
+                <span className="text-xs">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4" />
+                <span className="text-xs">Copy</span>
+              </>
+            )}
+          </Button>
+        </div>
         <Textarea
           placeholder={`${
             isEncoding
