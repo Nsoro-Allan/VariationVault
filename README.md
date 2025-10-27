@@ -180,8 +180,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - Forked from [Paul Butler's](https://github.com/paulgb) original project [emoji-encoder](https://github.com/paulgb/emoji-encoder)
 
----
-
-<br/>
+## 🧑‍💻 Author
 
 **<🧑‍💻> Redesigned and updated by [Nsoro Allan.](https://github.com/Nsoro-Allan) <🧑‍💻/>**
