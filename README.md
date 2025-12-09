@@ -165,21 +165,10 @@ The app uses Tailwind CSS with CSS variables. Customize colors in `app/globals.c
 }
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
 ## 🙏 Acknowledgments
 
 - Forked from [Paul Butler's](https://github.com/paulgb) original project [emoji-encoder](https://github.com/paulgb/emoji-encoder)
 
 ## 🧑‍💻 Author
 
-**<🧑‍💻> Redesigned and updated by [Nsoro Allan.](https://github.com/Nsoro-Allan) <🧑‍💻/>**
+**🧑‍💻 Redesigned and updated by [Nsoro Allan.](https://github.com/Nsoro-Allan) 🧑‍💻**
